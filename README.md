@@ -4,7 +4,7 @@ Very simple app to fetch random comics from various sites.
 
 Currently implemented: xkcd
 
-###TODO 
+### TODO
 
 - better gui arrangement
 - zoom
