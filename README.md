@@ -7,4 +7,4 @@ Currently implemented: xkcd
 ### TODO
 
 - better gui arrangement
-- zoom
+- more sites

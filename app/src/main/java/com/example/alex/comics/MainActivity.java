@@ -1,19 +1,18 @@
 package com.example.alex.comics;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -21,7 +20,6 @@ import java.net.URLConnection;
 public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
-//    String url = "https://imgs.xkcd.com/comics/magic_school_bus.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
         assert link != null;
 
-        imageView = findViewById(R.id.imageView);
-        loadFromURL(link);
+        PhotoView photoView = findViewById(R.id.photo_view);
+        Picasso.with(this).load(link).into(photoView);
     }
 
     private void loadFromURL(String url) {
