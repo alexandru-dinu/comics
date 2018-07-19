@@ -1,26 +1,28 @@
 package com.example.alex.comics;
 
-import android.net.Uri;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView imageView;
+    PhotoView photoView;
 
+    XKCD xkcd;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,64 +31,29 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        loadComic();
-    }
+        photoView = findViewById(R.id.photo_view);
+        photoView.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                loadComic();
+            }
 
-    public void buttonOnClick(View v) {
+            @Override
+            public void onSwipeLeft() {
+                loadComic();
+            }
+        });
+
+        xkcd = new XKCD();
         loadComic();
+
     }
 
     private void loadComic() {
-        BufferedReader br = null;
-        String link = null;
-
-        try {
-            URLConnection con = new URL("https://c.xkcd.com/random/comic/").openConnection();
-            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                int i = line.indexOf("https://imgs.xkcd.com");
-
-                if (i >= 0) {
-                    link = line.substring(i, line.length());
-                    break;
-                }
-            }
-        }
-        catch (Exception e) {
-
-        }
-        finally {
-            if (br != null) {
-                try {
-                    br.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        String link = xkcd.getDirectComicLink();
 
         assert link != null;
 
-        PhotoView photoView = findViewById(R.id.photo_view);
         Picasso.with(this).load(link).into(photoView);
-    }
-
-    private void loadFromURL(String url) {
-        Picasso.with(this).load(url).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .into(imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
     }
 }
