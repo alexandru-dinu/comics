@@ -32,21 +32,9 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         photoView = findViewById(R.id.photo_view);
-        photoView.setOnTouchListener(new OnSwipeTouchListener(this) {
-            @Override
-            public void onSwipeRight() {
-                loadComic();
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                loadComic();
-            }
-        });
 
         xkcd = new XKCD();
         loadComic();
-
     }
 
     private void loadComic() {
@@ -55,5 +43,9 @@ public class MainActivity extends AppCompatActivity {
         assert link != null;
 
         Picasso.with(this).load(link).into(photoView);
+    }
+
+    public void buttonOnClick(View v) {
+        loadComic();
     }
 }
